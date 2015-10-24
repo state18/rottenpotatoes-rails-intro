@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
     
     if need_redirect
       flash.keep
-      redirect_to movies_path :ratings => session[:ratings], :sort_by => session[:sort_by]
+      redirect_to :ratings => session[:ratings], :sort_by => session[:sort_by]
     end
     
     if session[:ratings].present?
