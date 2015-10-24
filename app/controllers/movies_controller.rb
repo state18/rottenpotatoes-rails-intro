@@ -12,8 +12,18 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    @movies = Movie.order(params[:sort_by])
-    @active_sort = params[:sort_by]
+
+    session[:ratings] = params[:ratings] if params[:ratings].present?
+    session[:order] = params[:order] if params[:order].present?
+    session[:sort_by] = params[:sort_by] if params[:sort_by].present?
+    
+    if session[:ratings].present?
+      @movies = Movie.order(session[:sort_by]).where(rating: session[:ratings].keys)
+    else
+       @movies = Movie.order(session[:sort_by]) 
+    end
+  
+    @active_sort = session[:sort_by]
   end
 
   def new
