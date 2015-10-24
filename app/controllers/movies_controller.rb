@@ -13,9 +13,9 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     
-    if params[:ratings].nil? && params[:sort_by].nil? && params[:order].nil?
+    if params[:ratings].nil?
       flash.keep
-      redirect_to movies_path :ratings => session[:ratings], :sort_by => session[:sort_by], :order => session[:order]
+      redirect_to movies_path :ratings => session[:ratings]
     end
 
     session[:ratings] = params[:ratings] if params[:ratings].present?
