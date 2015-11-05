@@ -13,6 +13,9 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     need_redirect = false
+    
+    #Handle the ratings by checking params to see if the user specified ratings.
+    #If there is no previous session, create a new Hash and fill it with all_ratings
     ratings = params[:ratings] || session[:ratings] || {}
     if ratings != {}
       @ratings = ratings
@@ -20,12 +23,15 @@ class MoviesController < ApplicationController
       @ratings = Hash.new
       @all_ratings.each {|r| @ratings[r] = 1}
     end
+    
+    #If the user has specified ratings, we don't need to redirect.
     if params[:ratings]
       session[:ratings] = @ratings
     elsif session[:ratings]
       need_redirect = true
     end
     
+    #store the :sort_by of params. If it is empty, store session[:sort_by] instead
     sort_by = params[:sort_by] || session[:sort_by]
     if params[:sort_by]
       session[:sort_by] = sort_by
@@ -33,6 +39,7 @@ class MoviesController < ApplicationController
       need_redirect = true
     end
 
+    #To maintain RESTful routes, redirect using the current parameters
     if need_redirect
       redirect_to :sort_by => sort_by, :ratings => @ratings
     end
